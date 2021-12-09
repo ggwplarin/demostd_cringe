@@ -47,7 +47,7 @@ namespace formstest
             if (!(!string.IsNullOrWhiteSpace(textBox1.Text) && Int32.TryParse(textBox2.Text, out _) && Int32.TryParse(textBox3.Text, out _))) return;
             try
             {
-                var cringe = new Cringe() { id = 0, name = textBox1.Text, lvl = Int32.Parse(textBox2.Text), gg = Int32.Parse(textBox3.Text) };
+                var cringe = new Cringe[] { new Cringe() { id = 0, name = textBox1.Text, lvl = Int32.Parse(textBox2.Text), gg = Int32.Parse(textBox3.Text) } };
                 var content = new StringContent(JsonSerializer.Serialize(cringe), Encoding.UTF8, "application/json");
                 HttpClient client = new HttpClient();
                 var response = await client.PostAsync("http://localhost:5147/cringes", content);

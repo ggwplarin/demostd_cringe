@@ -24,11 +24,15 @@ app.MapGet("/cringes", async (Db db) =>
 app.MapGet("/cringes/{id}", async (int id, Db db) =>
      await db.Cringes.FindAsync(id) is Cringe cringe ? Results.Ok(cringe) : Results.NotFound());
 
-app.MapPost("/cringes", async (Cringe cringe, Db db) =>
+app.MapPost("/cringes", async (Cringe[] cringes, Db db) =>
 {
-    db.Cringes.Add(cringe);
+    foreach (var cringe in cringes)
+    {
+        cringe.id = 0;
+        db.Cringes.Add(cringe);
+    }
     await db.SaveChangesAsync();
-    return Results.Created($"/cringes/{cringe.id}", cringe);
+    return Results.Ok();
 });
 
 app.MapPut("/cringes/{id}", async (int id, Cringe inputCringe, Db db) =>
@@ -41,7 +45,7 @@ app.MapPut("/cringes/{id}", async (int id, Cringe inputCringe, Db db) =>
     cringe.gg = inputCringe.gg;
 
     await db.SaveChangesAsync();
-    return Results.NoContent();
+    return Results.Ok();
 });
 
 app.MapDelete("/cringes/{id}", async (int id, Db db) =>
